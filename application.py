@@ -2,24 +2,24 @@ from flask import Flask, request, redirect
 from flask_mail import Mail, Message
 from werkzeug.utils import secure_filename
 
-app = Flask(__name__)
+application = Flask(__name__)
 
 # config values for testing
-app.config["MAIL_SERVER"]= "smtp.mailtrap.io"
-app.config["MAIL_PORT"] = 2525
-app.config["MAIL_USERNAME"] = "5e98fcdb61f449"
-app.config["MAIL_PASSWORD"] = "494caa4a69663f"
-app.config["MAIL_USE_TLS"] = True
-app.config["MAIL_USE_SSL"] = False
-app.config["MAIL_DEFAULT_SENDER"] = "contact@bc-muslim-anthology-proj.netlify.app"
+application.config["MAIL_SERVER"]= "smtp.mailtrap.io"
+application.config["MAIL_PORT"] = 2525
+application.config["MAIL_USERNAME"] = "5e98fcdb61f449"
+application.config["MAIL_PASSWORD"] = "494caa4a69663f"
+application.config["MAIL_USE_TLS"] = True
+application.config["MAIL_USE_SSL"] = False
+application.config["MAIL_DEFAULT_SENDER"] = "contact@bc-muslim-anthology-proj.netlify.app"
 
-mail = Mail(app)
+mail = Mail(application)
 
-@app.route("/")
+@application.route("/")
 def hello_world():
   return "Hello, World!"
 
-@app.route("/submission", methods=["POST"])
+@application.route("/submission", methods=["POST"])
 def submission():
   full_name = request.form["name"]
   email_address = request.form["email"]
@@ -35,7 +35,7 @@ def submission():
     filename = secure_filename(file.filename)
     filepath = f"uploads/{filename}"
     file.save(filepath)
-    with app.open_resource(filepath) as f:
+    with application.open_resource(filepath) as f:
       msg.attach(filename, file.mimetype, f.read())
     submission_files.append(filename)
 
@@ -53,7 +53,7 @@ Files: {submission_files}"
   
   return redirect("https://bc-muslim-anthology-proj.netlify.app/submit-entry?success")
 
-@app.route("/contact", methods=["POST"])
+@application.route("/contact", methods=["POST"])
 def contact():
   name = request.form["name"]
   email = request.form["email"]
@@ -74,3 +74,7 @@ message: {message}"
   print(messageBody)
   
   return redirect("https://bc-muslim-anthology-proj.netlify.app/contact-us?success")
+
+
+if __name__ == "__main__":
+  application.run()
