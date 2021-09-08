@@ -1,0 +1,10 @@
+{
+    "dev": {
+        "app_function": "application.application",
+        "aws_region": "us-west-2",
+        "profile_name": "default",
+        "project_name": "map-serverless",
+        "runtime": "python3.8",
+        "s3_bucket": "map-zappa"
+    }
+}
